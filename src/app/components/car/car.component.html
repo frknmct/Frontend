@@ -1,0 +1,60 @@
+<div *ngIf="dataLoaded==false" class="spinner-border" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div> 
+
+
+<div class="mb-3">
+  <label for="filterText" class="form-label">Araba ara</label>
+  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="arama ifadesi giriniz..">
+</div>
+
+<div *ngIf="filterText" class="alert alert-primary">
+  {{filterText}} aradınız
+</div>
+
+<div>
+  <select class="form-select" size="1" aria-label="size 1 select example">
+    <option (click)="getBrands()"  selected>Marka Seçiniz</option>
+    <option *ngFor="let brand of brands" value="brand.brandName">{{brand.brandName}}</option>
+  </select>
+</div>
+<div>
+<select class="form-select" size="1" aria-label="size 1 select example">
+  <option selected>Renk Seçiniz</option>
+  <option value="1">One</option>
+</select>
+</div>
+
+
+<table *ngIf="dataLoaded==true" class="table" >
+  <thead>
+      <tr>
+          <th>Id</th>
+          <th>Marka</th>
+          <th>Renk</th>
+          <th>İsim</th>
+          <th>Model Yılı</th>
+          <th>Günlük Ücret</th>
+          <th>Kdv'li Fiyat</th>
+          <th>Açıklama</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let car of cars | filterPipe:filterText ">
+      <td>{{car.id}}</td>
+      <td>{{car.brandId}}</td>
+      <td>{{car.colorId}}</td>
+      <td>{{car.carName | uppercase}}</td>
+      <td>{{car.modelYear}}</td>
+      <td>{{car.dailyPrice | currency}}</td>
+      <td>{{car.dailyPrice | vatAdded:18 | currency }}</td>
+      <td>{{car.description}}</td>
+      <button type="button" class="btn btn-primary" (click)="setCurrentCar(car)" 
+      routerLink = "/cars/detail/{{car.id}}">Arabaya Git</button>
+  </tr>
+</tbody>
+</table>
+
+<h5 *ngIf="currentCar"> {{currentCar.carName}} seçtiniz</h5>
+  
